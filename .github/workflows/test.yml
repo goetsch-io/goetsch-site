@@ -1,0 +1,64 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true  # Fetch Hugo themes (if used)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.145.0'
+          extended: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Add linting step (if you have ESLint configured)
+      # - name: Lint
+      #   run: npm run lint
+
+      # Build the site
+      - name: Build
+        run: npm run build
+
+      # Add testing step (if you have tests configured)
+      # - name: Test
+      #   run: npm test
+
+      # Check for broken links (optional)
+      - name: Check for broken links
+        run: |
+          echo "Checking for broken links in the built site..."
+          # You can use a tool like linkinator or htmlproofer here
+          # For example: npx linkinator ./public --recurse --skip "^(?!http://localhost)"
+
+      # Security scan for dependencies
+      - name: Security scan
+        run: npm audit --production
+
+      # Notify success via webhook (optional)
+      - name: Notify build success
+        if: success()
+        run: |
+          echo "Build and tests completed successfully!"
+          # You can add a webhook call to notify external systems
+          # curl -X POST -H "Content-Type: application/json" -d '{"status":"success"}' https://your-webhook-url

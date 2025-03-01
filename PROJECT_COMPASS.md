@@ -27,6 +27,7 @@ This document serves as a guiding compass for the Bradley Goetsch personal websi
 - [2025-03-01] Added sample content to demonstrate functionality
 - [2025-03-01] Created comprehensive documentation (README, LICENSE, .gitignore)
 - [2025-03-01] Set up continuous delivery pipeline from GitHub to Cloudflare Pages
+- [2025-03-01] Implemented hybrid CI/CD approach with GitHub Actions for testing and Cloudflare Pages for deployment
 
 ## Evaluation Criteria
 
@@ -44,11 +45,12 @@ You're off to a great start! Here's a roadmap for next steps so you can iterate 
 
 ### 1️⃣ Automate Deployment (Make It Easy to Update) ✓
 
-✅ Set Up GitHub Actions for Hugo
-- Automate site builds every time you push changes.
-- Deploy directly to Cloudflare Pages using GitHub Actions.
-- Workflow file created at `.github/workflows/deploy.yml`.
-- Detailed documentation added in `CONTINUOUS_DELIVERY.md`.
+✅ Set Up Hybrid CI/CD Pipeline
+- Implemented GitHub Actions for testing and quality assurance.
+- Connected Cloudflare Pages for secure, direct deployment.
+- Created separate workflows for testing (`.github/workflows/test.yml`) and deployment.
+- Added comprehensive documentation in `HYBRID_CICD.md`.
+- Legacy deployment approach documented in `CONTINUOUS_DELIVERY.md`.
 
 ### 2️⃣ Improve Content & Structure
 
