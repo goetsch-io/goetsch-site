@@ -1,0 +1,55 @@
+﻿2025-03-01T12:36:49.7903037Z Current runner version: '2.322.0'
+2025-03-01T12:36:49.7928274Z ##[group]Operating System
+2025-03-01T12:36:49.7929096Z Ubuntu
+2025-03-01T12:36:49.7929606Z 24.04.2
+2025-03-01T12:36:49.7930176Z LTS
+2025-03-01T12:36:49.7930675Z ##[endgroup]
+2025-03-01T12:36:49.7931215Z ##[group]Runner Image
+2025-03-01T12:36:49.7931876Z Image: ubuntu-24.04
+2025-03-01T12:36:49.7932448Z Version: 20250223.1.0
+2025-03-01T12:36:49.7933510Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250223.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-03-01T12:36:49.7934912Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250223.1
+2025-03-01T12:36:49.7936020Z ##[endgroup]
+2025-03-01T12:36:49.7936584Z ##[group]Runner Image Provisioner
+2025-03-01T12:36:49.7937221Z 2.0.422.1
+2025-03-01T12:36:49.7937743Z ##[endgroup]
+2025-03-01T12:36:49.7938927Z ##[group]GITHUB_TOKEN Permissions
+2025-03-01T12:36:49.7940732Z Contents: read
+2025-03-01T12:36:49.7941389Z Metadata: read
+2025-03-01T12:36:49.7942106Z Packages: read
+2025-03-01T12:36:49.7942812Z ##[endgroup]
+2025-03-01T12:36:49.7945882Z Secret source: Actions
+2025-03-01T12:36:49.7946684Z Prepare workflow directory
+2025-03-01T12:36:49.8254407Z Prepare all required actions
+2025-03-01T12:36:49.8347503Z Complete job name: deploy
+2025-03-01T12:36:49.9265503Z ##[group]Run RESPONSE=$(curl -X POST -d {} "***" -w "\n%{http_code}" -s)
+2025-03-01T12:36:49.9267086Z [36;1mRESPONSE=$(curl -X POST -d {} "***" -w "\n%{http_code}" -s)[0m
+2025-03-01T12:36:49.9267832Z [36;1mHTTP_CODE=$(echo "$RESPONSE" | tail -n1)[0m
+2025-03-01T12:36:49.9268460Z [36;1mCONTENT=$(echo "$RESPONSE" | sed '$d')[0m
+2025-03-01T12:36:49.9269029Z [36;1m[0m
+2025-03-01T12:36:49.9269500Z [36;1mecho "HTTP Status Code: $HTTP_CODE"[0m
+2025-03-01T12:36:49.9270094Z [36;1mecho "Response Content: $CONTENT"[0m
+2025-03-01T12:36:49.9270637Z [36;1m[0m
+2025-03-01T12:36:49.9271151Z [36;1mif [[ "$HTTP_CODE" -ge 200 && "$HTTP_CODE" -lt 300 ]]; then[0m
+2025-03-01T12:36:49.9272106Z [36;1m  echo "Deployment successfully triggered via Cloudflare Deploy Hook"[0m
+2025-03-01T12:36:49.9273047Z [36;1m  echo "Please check the Cloudflare Pages dashboard for deployment status"[0m
+2025-03-01T12:36:49.9273915Z [36;1m  echo "Expected URL: https://goetsch-site.pages.dev/"[0m
+2025-03-01T12:36:49.9274577Z [36;1melse[0m
+2025-03-01T12:36:49.9275386Z [36;1m  echo "Failed to trigger deployment. Please check Cloudflare Pages configuration."[0m
+2025-03-01T12:36:49.9276162Z [36;1m  exit 1[0m
+2025-03-01T12:36:49.9276570Z [36;1mfi[0m
+2025-03-01T12:36:49.9573785Z shell: /usr/bin/bash -e {0}
+2025-03-01T12:36:49.9574630Z ##[endgroup]
+2025-03-01T12:36:50.4667270Z HTTP Status Code: 200
+2025-03-01T12:36:50.4668020Z Response Content: {
+2025-03-01T12:36:50.4668542Z   "result": {
+2025-03-01T12:36:50.4669039Z     "id": "82edca64-d589-4af1-9123-1ee23d1b838c"
+2025-03-01T12:36:50.4669644Z   },
+2025-03-01T12:36:50.4670075Z   "success": true,
+2025-03-01T12:36:50.4670540Z   "errors": [],
+2025-03-01T12:36:50.4670994Z   "messages": []
+2025-03-01T12:36:50.4671480Z }
+2025-03-01T12:36:50.4672070Z Deployment successfully triggered via Cloudflare Deploy Hook
+2025-03-01T12:36:50.4672987Z Please check the Cloudflare Pages dashboard for deployment status
+2025-03-01T12:36:50.4673821Z Expected URL: https://goetsch-site.pages.dev/
+2025-03-01T12:36:50.4772550Z Cleaning up orphan processes
