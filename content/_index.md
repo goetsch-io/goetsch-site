@@ -6,7 +6,7 @@ draft: false
 
 ## Hello, I'm Bradley Goetsch
 
-Welcome to my personal website! This is a clean, minimal Hugo site.
+Welcome to my personal website! This is a clean, minimal Hugo site built with Tailwind CSS.
 
 ### About Me
 
@@ -18,7 +18,7 @@ This is just the beginning. I'll be adding more content and features to this sit
 
 ### Enhanced CI/CD Pipeline
 
-This site is now set up with an enhanced hybrid CI/CD pipeline using GitHub Actions for testing and Cloudflare Pages Deploy Hooks for secure deployment. This approach provides better security, clearer separation of concerns, and simplified deployment.
+This site is deployed through a hybrid CI/CD pipeline using GitHub Actions for testing and Cloudflare Pages for secure deployment. The current URL is https://goetsch-site.pages.dev/ but will eventually change to a custom domain.
 
 The pipeline automatically:
 - Builds and tests the site

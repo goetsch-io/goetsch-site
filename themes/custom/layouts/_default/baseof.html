@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ if .Title }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
     <!-- Use the static CSS file in development -->
-    {{ if .Site.IsServer }}
-        {{ $css := resources.Get "css/main.css" | resources.PostCSS }}
-        <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+    {{ if (eq (getenv "HUGO_ENV") "production") }}
+        <link rel="stylesheet" href="/css/tailwind.css">
     <!-- Use the pre-built CSS file in production -->
     {{ else }}
-        <link rel="stylesheet" href="/css/tailwind.css">
+        {{ $css := resources.Get "css/main.css" | css.PostCSS }}
+        <link rel="stylesheet" href="{{ $css.RelPermalink }}">
     {{ end }}
 </head>
 <body class="bg-gray-100 min-h-screen">
