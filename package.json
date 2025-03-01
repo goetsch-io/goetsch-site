@@ -14,7 +14,9 @@
     "watch:css": "tailwindcss -i ./assets/css/main.css -o ./themes/custom/static/css/tailwind.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "git push && echo \"Deployment triggered through CI/CD pipeline. Check status with: npm run status\"",
-    "status": "git pull && cat build_logs/claude/status.md 2>/dev/null || cat build_logs/README.md",
+    "status": "./build_status.sh",
+    "status:watch": "./monitor_build.sh",
+    "status:watch:fast": "./monitor_build.sh 10",
     "versions": "echo \"Node: $(node -v)\" && echo \"NPM: $(npm -v)\" && echo \"Hugo: $(hugo version)\" && echo \"Tailwind: $(npx tailwindcss --version)\""
   },
   "keywords": [],

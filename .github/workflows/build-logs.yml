@@ -311,7 +311,7 @@ jobs:
           
           # Create a condensed status report
           cat > build_logs/claude/status.md << EOF
-          # Latest Status Report
+          # Latest Status Report (Updated: $(date -u))
           
           ## GitHub Actions Status
           
@@ -324,6 +324,14 @@ jobs:
           ## Recent Errors
           
           $(grep -r "error\|failed\|warning" --include="*.log" build_logs/ | head -20 || echo "No errors found")
+          
+          ## Recent Activity
+          
+          $(git log -n 5 --pretty=format:"* %h - %s (%cr)" || echo "No recent commits found")
+          
+          ## Build Status
+          
+          $(grep -A 2 "status" build_logs/github/last_build_summary.md 2>/dev/null || echo "Unknown")
           
           ## Site URL
           
