@@ -40,3 +40,4 @@ jobs:
           projectName: goetsch-site  # Your Cloudflare Pages project name
           directory: public
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main  # Specify the branch explicitly
