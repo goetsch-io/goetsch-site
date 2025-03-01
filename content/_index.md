@@ -6,7 +6,7 @@ draft: false
 
 ## Hello, I'm Bradley Goetsch
 
-Welcome to my personal website! This is a clean, minimal Hugo site built with Tailwind CSS and deployed through Cloudflare Pages.
+Welcome to my personal website! This is a clean, minimal Hugo site built with Tailwind CSS and deployed through Cloudflare Pages with automated logging.
 
 ### About Me
 
