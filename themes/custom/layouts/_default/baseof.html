@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ if .Title }}{{ .Title }} | {{ end }}{{ .Site.Title }}</title>
-    {{ $css := resources.Get "css/main.css" | resources.PostCSS }}
-    <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+    <!-- Use the static CSS file in development -->
+    {{ if .Site.IsServer }}
+        {{ $css := resources.Get "css/main.css" | resources.PostCSS }}
+        <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+    <!-- Use the pre-built CSS file in production -->
+    {{ else }}
+        <link rel="stylesheet" href="/css/tailwind.css">
+    {{ end }}
 </head>
 <body class="bg-gray-100 min-h-screen">
     <header class="bg-white shadow-md p-4">
