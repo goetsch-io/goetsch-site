@@ -52,6 +52,16 @@
 7. Deploy to **staging environment** (Netlify/Vercel preview).
 8. After testing, merge `develop` → `main`.
 
+### **📌 Package Management**
+⚠️ **IMPORTANT: Keep package.json and package-lock.json in sync!**
+1. After adding or updating dependencies in package.json, **ALWAYS run `npm install`** to update the package-lock.json file.
+2. Commit both files together in the same commit.
+3. Never manually edit package-lock.json.
+4. If encountering issues with dependencies, try:
+   - `npm install` to update package-lock.json
+   - `rm package-lock.json && npm install` to regenerate it completely
+5. The CI build uses `npm ci` which requires an exact match between package.json and package-lock.json.
+
 ### **📌 Deployment Strategy**
 ✅ Use **GitHub Actions** for automated builds.
 ✅ Host previews on **Netlify or Vercel**.

@@ -17,7 +17,9 @@
     "status": "./build_status.sh",
     "status:watch": "./monitor_build.sh",
     "status:watch:fast": "./monitor_build.sh 10",
-    "versions": "echo \"Node: $(node -v)\" && echo \"NPM: $(npm -v)\" && echo \"Hugo: $(hugo version)\" && echo \"Tailwind: $(npx tailwindcss --version)\""
+    "versions": "echo \"Node: $(node -v)\" && echo \"NPM: $(npm -v)\" && echo \"Hugo: $(hugo version)\" && echo \"Tailwind: $(npx tailwindcss --version)\"",
+    "update-deps": "npm install && echo \"✅ Dependencies synchronized! package-lock.json has been updated to match package.json\"",
+    "fix-deps": "rm -f package-lock.json && npm install && echo \"✅ package-lock.json has been regenerated from scratch\""
   },
   "keywords": [],
   "author": "",

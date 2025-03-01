@@ -28,6 +28,12 @@ npm run dev:full       # Run Hugo and CSS watcher in parallel
 npm run dev:full:open  # Run Hugo and CSS watcher + open browser
 ```
 
+### Manage Dependencies
+```bash
+npm run update-deps    # Update package-lock.json to match package.json
+npm run fix-deps       # Regenerate package-lock.json from scratch
+```
+
 ### Deploy Site
 ```bash
 npm run deploy       # Push changes and trigger deployment
@@ -45,3 +51,8 @@ npm run deploy       # Push changes and trigger deployment
 ### URLs
 - Development: http://localhost:1313
 - Production: https://goetsch-site.pages.dev/
+
+### Important Development Notes
+- Always run `npm run update-deps` after changing dependencies in package.json
+- The CI build uses `npm ci` which requires exact match between package.json and package-lock.json
+- If you encounter CI errors about missing dependencies, use `npm run fix-deps`
