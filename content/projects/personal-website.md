@@ -22,6 +22,16 @@ This website itself is one of my projects! Built with Hugo and styled with Tailw
 - Blog section for sharing thoughts and tutorials
 - Projects showcase
 
+### Development Workflow
+
+This project features an optimized development workflow:
+
+- **Parallel Processing**: Concurrent Hugo server and Tailwind CSS watching
+- **Automated Browser Opening**: Commands that automatically open the browser
+- **Deployment Automation**: Simple deploy commands with status tracking
+- **CSS Auto-Rebuilding**: CSS rebuilds automatically when files change
+- **Enhanced Documentation**: Comprehensive documentation for all commands
+
 ### Future Plans
 
 I plan to continue improving this site by adding:
