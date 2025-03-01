@@ -1,0 +1,45 @@
+﻿2025-03-01T11:53:27.6288569Z Current runner version: '2.322.0'
+2025-03-01T11:53:27.6312800Z ##[group]Operating System
+2025-03-01T11:53:27.6313682Z Ubuntu
+2025-03-01T11:53:27.6314185Z 24.04.2
+2025-03-01T11:53:27.6314704Z LTS
+2025-03-01T11:53:27.6315288Z ##[endgroup]
+2025-03-01T11:53:27.6315860Z ##[group]Runner Image
+2025-03-01T11:53:27.6316450Z Image: ubuntu-24.04
+2025-03-01T11:53:27.6317043Z Version: 20250223.1.0
+2025-03-01T11:53:27.6318104Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20250223.1/images/ubuntu/Ubuntu2404-Readme.md
+2025-03-01T11:53:27.6319466Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20250223.1
+2025-03-01T11:53:27.6320467Z ##[endgroup]
+2025-03-01T11:53:27.6320996Z ##[group]Runner Image Provisioner
+2025-03-01T11:53:27.6321595Z 2.0.422.1
+2025-03-01T11:53:27.6322195Z ##[endgroup]
+2025-03-01T11:53:27.6323449Z ##[group]GITHUB_TOKEN Permissions
+2025-03-01T11:53:27.6325337Z Contents: read
+2025-03-01T11:53:27.6325909Z Metadata: read
+2025-03-01T11:53:27.6326697Z Packages: read
+2025-03-01T11:53:27.6327292Z ##[endgroup]
+2025-03-01T11:53:27.6330218Z Secret source: Actions
+2025-03-01T11:53:27.6330940Z Prepare workflow directory
+2025-03-01T11:53:27.6639638Z Prepare all required actions
+2025-03-01T11:53:27.6728982Z Complete job name: deploy
+2025-03-01T11:53:27.7600031Z ##[group]Run curl -X POST -d {} "***"
+2025-03-01T11:53:27.7601227Z [36;1mcurl -X POST -d {} "***"[0m
+2025-03-01T11:53:27.7601903Z [36;1mecho "Deployment triggered via Cloudflare Deploy Hook"[0m
+2025-03-01T11:53:27.7938330Z shell: /usr/bin/bash -e {0}
+2025-03-01T11:53:27.7939855Z ##[endgroup]
+2025-03-01T11:53:27.8200088Z   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+2025-03-01T11:53:27.8200969Z                                  Dload  Upload   Total   Spent    Left  Speed
+2025-03-01T11:53:27.8201398Z 
+2025-03-01T11:53:28.0257776Z   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+2025-03-01T11:53:28.3860665Z 100     2    0     0  100     2      0      9 --:--:-- --:--:-- --:--:--     9
+2025-03-01T11:53:28.3862006Z {
+2025-03-01T11:53:28.3862957Z   "result": {
+2025-03-01T11:53:28.3863822Z     "id": "3e7ee119-b205-4645-a2e6-9c05b3daef0f"
+2025-03-01T11:53:28.3864812Z   },
+2025-03-01T11:53:28.3865493Z   "success": true,
+2025-03-01T11:53:28.3866309Z   "errors": [],
+2025-03-01T11:53:28.3867015Z   "messages": []
+2025-03-01T11:53:28.3867597Z }
+2025-03-01T11:53:28.3868331Z 100   126    0   124  100     2    218      3 --:--:-- --:--:-- --:--:--   221
+2025-03-01T11:53:28.3887141Z Deployment triggered via Cloudflare Deploy Hook
+2025-03-01T11:53:28.3985669Z Cleaning up orphan processes
