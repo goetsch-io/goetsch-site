@@ -15,3 +15,7 @@ I'm passionate about technology and innovation. This space will showcase my proj
 ### What's Next
 
 This is just the beginning. I'll be adding more content and features to this site soon!
+
+### Continuous Delivery
+
+This site is now set up with a continuous delivery pipeline using GitHub Actions and Cloudflare Pages. Any changes pushed to the main branch will automatically be deployed.
