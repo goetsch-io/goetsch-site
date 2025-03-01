@@ -1,4 +1,4 @@
-# Claude Memory File
+# Claude Memory File - Deployment Info
 
 ## Common Commands
 
