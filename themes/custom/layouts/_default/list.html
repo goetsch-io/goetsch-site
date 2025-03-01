@@ -1,8 +1,8 @@
 {{ define "main" }}
 <h1>{{ .Title }}</h1>
-<div>
+<div class="grid">
     {{ range .Pages }}
-    <a href="{{ .Permalink }}" style="display: block; margin-bottom: 1rem; padding: 1rem; border: 1px solid #eee; border-radius: 4px;">
+    <a href="{{ .Permalink }}">
         <h2>{{ .Title }}</h2>
         <p>{{ .Summary }}</p>
     </a>

@@ -2,11 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Home on Bradley Goetsch</title>
-    <link>http://localhost:1313/</link>
+    <link>http://localhost:53700/</link>
     <description>Recent content in Home on Bradley Goetsch</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate></lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Mar 2025 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:53700/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Getting Started with Hugo</title>
+      <link>http://localhost:53700/posts/first-post/</link>
+      <pubDate>Sat, 01 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:53700/posts/first-post/</guid>
+      <description>&lt;h2 id=&#34;hello-world&#34;&gt;Hello World!&lt;/h2&gt;&#xA;&lt;p&gt;This is my first blog post using Hugo. Hugo is a fast and modern static site generator written in Go, and designed to make website creation fun again.&lt;/p&gt;&#xA;&lt;h3 id=&#34;why-hugo&#34;&gt;Why Hugo?&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Speed&lt;/strong&gt;: Hugo is one of the fastest static site generators available.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Flexibility&lt;/strong&gt;: With Hugo, you have complete control over your site&amp;rsquo;s structure and design.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Ease of use&lt;/strong&gt;: The learning curve is gentle, making it accessible for beginners.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;code-example&#34;&gt;Code Example&lt;/h3&gt;&#xA;&lt;p&gt;Here&amp;rsquo;s a simple &amp;ldquo;Hello World&amp;rdquo; in Go:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Personal Website</title>
+      <link>http://localhost:53700/projects/personal-website/</link>
+      <pubDate>Sat, 01 Mar 2025 00:00:00 +0000</pubDate>
+      <guid>http://localhost:53700/projects/personal-website/</guid>
+      <description>&lt;h2 id=&#34;my-personal-website&#34;&gt;My Personal Website&lt;/h2&gt;&#xA;&lt;p&gt;This website itself is one of my projects! Built with Hugo and styled with Tailwind CSS, it serves as both a portfolio and a blog.&lt;/p&gt;&#xA;&lt;h3 id=&#34;technologies-used&#34;&gt;Technologies Used&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Hugo&lt;/strong&gt;: A fast and flexible static site generator&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Tailwind CSS&lt;/strong&gt;: A utility-first CSS framework&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Markdown&lt;/strong&gt;: For content creation&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;GitHub&lt;/strong&gt;: For version control and deployment&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;features&#34;&gt;Features&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Responsive design that works on all devices&lt;/li&gt;&#xA;&lt;li&gt;Fast loading times thanks to static site generation&lt;/li&gt;&#xA;&lt;li&gt;Blog section for sharing thoughts and tutorials&lt;/li&gt;&#xA;&lt;li&gt;Projects showcase&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;future-plans&#34;&gt;Future Plans&lt;/h3&gt;&#xA;&lt;p&gt;I plan to continue improving this site by adding:&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>
