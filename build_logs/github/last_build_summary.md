@@ -10,6 +10,3 @@
 - [job_build-and-test_38034944724.log](/build_logs/github/job_build-and-test_38034944724.log)
 - [job_deploy_38034951853.log](/build_logs/github/job_deploy_38034951853.log)
 
-
----
-
