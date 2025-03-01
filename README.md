@@ -39,7 +39,10 @@ A clean, responsive personal website built with Hugo and custom CSS. This site s
 To start the development server:
 
 ```
-npm run dev
+npm run dev            # Start development server
+npm run dev:open       # Start server and open browser automatically
+npm run dev:full       # Run Hugo and Tailwind in parallel (best for development)
+npm run dev:full:open  # Full development environment with auto-browser open
 ```
 
 Or directly with Hugo:
@@ -49,6 +52,15 @@ hugo server
 ```
 
 This will start a local development server at http://localhost:1313/
+
+For testing the production build:
+
+```
+npm run serve       # Build and serve production site
+npm run serve:open  # Build, serve, and open browser automatically
+```
+
+This will serve the static production site at http://localhost:8000/
 
 ## Project Structure
 

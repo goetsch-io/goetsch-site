@@ -4,10 +4,18 @@
   "main": "index.js",
   "scripts": {
     "dev": "hugo server --bind 0.0.0.0 --baseURL http://localhost:1313/",
+    "dev:open": "open http://localhost:1313/ && hugo server --bind 0.0.0.0 --baseURL http://localhost:1313/",
+    "dev:full": "concurrently \"npm run watch:css\" \"npm run dev\"",
+    "dev:full:open": "concurrently \"npm run watch:css\" \"npm run dev:open\"",
     "serve": "./serve.sh",
+    "serve:open": "open http://localhost:8000/ && ./serve.sh",
     "build": "./build.sh",
     "build:css": "tailwindcss -i ./assets/css/main.css -o ./themes/custom/static/css/tailwind.css",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch:css": "tailwindcss -i ./assets/css/main.css -o ./themes/custom/static/css/tailwind.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "git push && echo \"Deployment triggered through CI/CD pipeline. Check status with: npm run status\"",
+    "status": "git pull && cat build_logs/claude/status.md 2>/dev/null || cat build_logs/README.md",
+    "versions": "echo \"Node: $(node -v)\" && echo \"NPM: $(npm -v)\" && echo \"Hugo: $(hugo version)\" && echo \"Tailwind: $(npx tailwindcss --version)\""
   },
   "keywords": [],
   "author": "",
@@ -16,6 +24,7 @@
     "@tailwindcss/postcss": "^4.0.9",
     "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.0.9",
     "tailwindcss-cli": "^0.1.2"

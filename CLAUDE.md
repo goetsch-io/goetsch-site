@@ -5,7 +5,7 @@
 ### Check Deployment Status
 To check the latest deployment status, run:
 ```bash
-cat build_logs/claude/status.md
+npm run status
 ```
 
 ### Build Site Locally
@@ -15,12 +15,22 @@ npm run build
 
 ### Serve Site Locally
 ```bash
-npm run serve
+npm run serve        # Start static server
+npm run serve:open   # Start server and open browser
 ```
 
 ### Development Server
 ```bash
-npm run dev
+npm run dev            # Start development server
+npm run dev:open       # Start server and open browser
+npm run watch:css      # Watch and auto-rebuild CSS
+npm run dev:full       # Run Hugo and CSS watcher in parallel
+npm run dev:full:open  # Run Hugo and CSS watcher + open browser
+```
+
+### Deploy Site
+```bash
+npm run deploy       # Push changes and trigger deployment
 ```
 
 ## Useful Information
