@@ -1,0 +1,85 @@
+name: Capture Build Logs
+
+on:
+  workflow_run:
+    workflows: [CI/CD Pipeline]
+    types:
+      - completed
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  capture-logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Get workflow logs
+        id: get-logs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get the latest workflow run ID
+          WORKFLOW_RUN_ID="${{ github.event.workflow_run.id }}"
+          
+          # Create logs directory if it doesn't exist
+          mkdir -p build_logs
+          
+          # Get the detailed logs
+          echo "Fetching logs for run ID: $WORKFLOW_RUN_ID"
+          
+          # Get job IDs for this workflow run
+          JOB_IDS=$(gh api "/repos/${{ github.repository }}/actions/runs/$WORKFLOW_RUN_ID/jobs" \
+            --jq '.jobs[].id')
+          
+          # For each job, get the logs
+          for JOB_ID in $JOB_IDS; do
+            echo "Fetching logs for job ID: $JOB_ID"
+            JOB_NAME=$(gh api "/repos/${{ github.repository }}/actions/jobs/$JOB_ID" \
+              --jq '.name' | tr ' ' '_')
+            
+            # Download logs and store them
+            gh api "/repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" > "build_logs/job_${JOB_NAME}_${JOB_ID}.log"
+          done
+          
+          # Create a summary file with workflow status
+          WORKFLOW_STATUS="${{ github.event.workflow_run.conclusion }}"
+          RUN_URL="${{ github.event.workflow_run.html_url }}"
+          COMMIT_SHA="${{ github.event.workflow_run.head_sha }}"
+          
+          cat > build_logs/last_build_summary.md << EOF
+          # Build Log Summary
+          
+          - **Status**: $WORKFLOW_STATUS
+          - **Run URL**: $RUN_URL
+          - **Commit**: $COMMIT_SHA
+          - **Completed At**: $(date -u)
+          
+          ## Log Files
+          
+          $(for file in build_logs/job_*.log; do echo "- [$(basename $file)](/$file)"; done)
+          
+          EOF
+          
+          # Append summary to the main log file for easier access
+          cp build_logs/last_build_summary.md build_logs/README.md
+
+      - name: Commit and push logs
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          
+          git add build_logs/
+          
+          # Commit only if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update build logs for run #${{ github.event.workflow_run.id }}"
+            git push
+          fi

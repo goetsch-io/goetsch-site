@@ -2,6 +2,10 @@
 /public/
 /resources/_gen/
 
+# Build logs should be committed
+!build_logs/
+!build_logs/**
+
 # Node modules
 /node_modules/
 
