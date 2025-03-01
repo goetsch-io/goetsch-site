@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "hugo server",
     "build": "./build.sh",
+    "build:css": "tailwindcss -i ./assets/css/main.css -o ./themes/custom/static/css/tailwind.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

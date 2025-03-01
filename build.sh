@@ -7,7 +7,7 @@ npm ci
 
 # Build Tailwind CSS
 echo "Building Tailwind CSS..."
-NODE_ENV=production npx tailwindcss -i ./assets/css/main.css -o ./themes/custom/static/css/tailwind.css
+NODE_ENV=production npm run build:css
 
 # Build Hugo site
 echo "Building Hugo site..."
