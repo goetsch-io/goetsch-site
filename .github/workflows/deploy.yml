@@ -1,15 +1,19 @@
-name: Deploy to Cloudflare Pages
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main  # or master, depending on your default branch
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
           submodules: true  # Fetch Hugo themes (if used)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
@@ -20,7 +24,7 @@ jobs:
           hugo-version: '0.145.0'
           extended: true
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -29,15 +33,31 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Build the site
       - name: Build
         run: npm run build
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: goetsch-site  # Your Cloudflare Pages project name
-          directory: public
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          branch: main  # Specify the branch explicitly
+      # Add testing step (if you have tests configured)
+      # - name: Run tests
+      #   run: npm test
+
+      # Security scan for dependencies
+      - name: Run security scan
+        run: npm audit --production
+
+      # Check for broken links (optional)
+      - name: Check for broken links
+        run: |
+          echo "Checking for broken links in the built site..."
+          # You can use a tool like linkinator or htmlproofer here
+          # For example: npx linkinator ./public --recurse --skip "^(?!http://localhost)"
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
+    steps:
+      - name: Trigger Cloudflare Pages Deployment
+        run: |
+          curl -X POST -d {} "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
+          echo "Deployment triggered via Cloudflare Deploy Hook"

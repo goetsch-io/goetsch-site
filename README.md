@@ -63,8 +63,7 @@ This will start a local development server at http://localhost:1313/
 - `assets/`: Source files for processed assets
 - `public/`: Generated site (created when building)
 - `.github/workflows/`: GitHub Actions workflow files
-  - `test.yml`: Build and test workflow for quality assurance
-  - `deploy.yml`: Continuous delivery workflow (legacy approach)
+  - `deploy.yml`: CI/CD pipeline with build, test, and deployment
 
 ## Content Management
 
@@ -113,10 +112,10 @@ The site can be deployed to any static hosting service:
 
 ### Automated Deployment (Recommended)
 
-This project uses a hybrid CI/CD approach that combines GitHub Actions for testing and Cloudflare Pages for deployment.
+This project uses a hybrid CI/CD approach that combines GitHub Actions for testing and Cloudflare Pages Deploy Hooks for secure deployment.
 
 - See [HYBRID_CICD.md](HYBRID_CICD.md) for detailed instructions on the hybrid CI/CD approach.
-- See [CONTINUOUS_DELIVERY.md](CONTINUOUS_DELIVERY.md) for the legacy GitHub Actions to Cloudflare Pages deployment pipeline.
+- See [CONTINUOUS_DELIVERY.md](CONTINUOUS_DELIVERY.md) for the legacy deployment approach (for reference only).
 
 Recommended hosting options:
 - Cloudflare Pages (with continuous delivery)
@@ -142,8 +141,8 @@ For teams working on this project, we follow a structured development workflow w
 - See [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md) for information on team roles, development workflow, CI/CD setup, and project management.
 - See [BRANCHING_STRATEGY.md](BRANCHING_STRATEGY.md) for detailed guidance on our Git branching strategy, including when and how to create branches.
 - See [GITHUB_PROJECTS_SETUP.md](GITHUB_PROJECTS_SETUP.md) for instructions on setting up and using GitHub Projects to track project status.
-- See [HYBRID_CICD.md](HYBRID_CICD.md) for detailed instructions on our hybrid CI/CD approach.
-- See [CONTINUOUS_DELIVERY.md](CONTINUOUS_DELIVERY.md) for the legacy automated deployment pipeline.
+- See [HYBRID_CICD.md](HYBRID_CICD.md) for detailed instructions on our hybrid CI/CD approach using Deploy Hooks.
+- See [CONTINUOUS_DELIVERY.md](CONTINUOUS_DELIVERY.md) for the legacy deployment approach (for reference only).
 
 This ensures consistent, secure, and efficient development across the team.
 

@@ -47,10 +47,10 @@ You're off to a great start! Here's a roadmap for next steps so you can iterate 
 
 ✅ Set Up Hybrid CI/CD Pipeline
 - Implemented GitHub Actions for testing and quality assurance.
-- Connected Cloudflare Pages for secure, direct deployment.
-- Created separate workflows for testing (`.github/workflows/test.yml`) and deployment.
+- Connected Cloudflare Pages Deploy Hooks for secure, direct deployment.
+- Created CI/CD pipeline with build, test, and deployment jobs (`.github/workflows/deploy.yml`).
 - Added comprehensive documentation in `HYBRID_CICD.md`.
-- Legacy deployment approach documented in `CONTINUOUS_DELIVERY.md`.
+- Legacy deployment approach documented in `CONTINUOUS_DELIVERY.md` for reference.
 
 ### 2️⃣ Improve Content & Structure
 
