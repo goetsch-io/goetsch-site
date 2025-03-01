@@ -117,6 +117,12 @@ This project uses a hybrid CI/CD approach that combines GitHub Actions for testi
 - See [HYBRID_CICD.md](HYBRID_CICD.md) for detailed instructions on the hybrid CI/CD approach.
 - See [CONTINUOUS_DELIVERY.md](CONTINUOUS_DELIVERY.md) for the legacy deployment approach (for reference only).
 
+**Important**: To use the hybrid CI/CD approach, you must:
+1. Create a Cloudflare Pages project named `goetsch-site`
+2. Set up a Deploy Hook in Cloudflare Pages pointing to the main branch
+3. Add the Deploy Hook URL as a GitHub secret named `CLOUDFLARE_DEPLOY_HOOK`
+4. Ensure proper build settings in Cloudflare Pages: build command `npm run build` and output directory `public`
+
 Recommended hosting options:
 - Cloudflare Pages (with continuous delivery)
 - GitHub Pages
