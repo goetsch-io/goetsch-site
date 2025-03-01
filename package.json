@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "hugo server",
+    "dev": "hugo server --bind 0.0.0.0 --baseURL http://localhost:1313/",
+    "serve": "./serve.sh",
     "build": "./build.sh",
     "build:css": "tailwindcss -i ./assets/css/main.css -o ./themes/custom/static/css/tailwind.css",
     "test": "echo \"Error: no test specified\" && exit 1"
