@@ -303,3 +303,35 @@ jobs:
             git commit -m "Update Cloudflare Pages deployment logs"
             git push
           fi
+          
+      - name: Create status file for Claude
+        if: success()
+        run: |
+          mkdir -p build_logs/claude
+          
+          # Create a condensed status report
+          cat > build_logs/claude/status.md << EOF
+          # Latest Status Report
+          
+          ## GitHub Actions Status
+          
+          $(cat build_logs/github/last_build_summary.md 2>/dev/null || echo "No GitHub Actions logs available")
+          
+          ## Cloudflare Pages Status
+          
+          $(cat build_logs/cloudflare/last_deployment_summary.md 2>/dev/null || echo "No Cloudflare Pages logs available")
+          
+          ## Recent Errors
+          
+          $(grep -r "error\|failed\|warning" --include="*.log" build_logs/ | head -20 || echo "No errors found")
+          
+          ## Site URL
+          
+          The site should be available at: https://goetsch-site.pages.dev/
+          
+          EOF
+          
+          # Commit and push the status file
+          git add build_logs/claude/
+          git commit -m "Update status report for Claude" || echo "No changes to commit"
+          git push || echo "Failed to push changes"
