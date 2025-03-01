@@ -122,6 +122,15 @@ Edit the CSS files in `themes/custom/static/css/` to customize the appearance.
 
 HTML templates are located in `themes/custom/layouts/`. Edit these files to change the structure of the pages.
 
+## Team Collaboration & Development Workflow
+
+For teams working on this project, we follow a structured development workflow with defined roles, branching strategies, and CI/CD practices.
+
+- See [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md) for information on team roles, development workflow, CI/CD setup, and project management.
+- See [BRANCHING_STRATEGY.md](BRANCHING_STRATEGY.md) for detailed guidance on our Git branching strategy, including when and how to create branches.
+
+This ensures consistent, secure, and efficient development across the team.
+
 ## License
 
 [MIT License](LICENSE)
