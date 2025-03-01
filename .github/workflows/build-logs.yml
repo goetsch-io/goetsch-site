@@ -5,14 +5,18 @@ on:
     workflows: [CI/CD Pipeline]
     types:
       - completed
+  schedule:
+    # Run every 15 minutes to check for new Cloudflare deployments
+    - cron: '*/15 * * * *'
 
 permissions:
   contents: write
   actions: read
 
 jobs:
-  capture-logs:
+  capture-github-logs:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_run'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,7 +32,7 @@ jobs:
           WORKFLOW_RUN_ID="${{ github.event.workflow_run.id }}"
           
           # Create logs directory if it doesn't exist
-          mkdir -p build_logs
+          mkdir -p build_logs/github
           
           # Get the detailed logs
           echo "Fetching logs for run ID: $WORKFLOW_RUN_ID"
@@ -44,30 +48,53 @@ jobs:
               --jq '.name' | tr ' ' '_')
             
             # Download logs and store them
-            gh api "/repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" > "build_logs/job_${JOB_NAME}_${JOB_ID}.log"
+            gh api "/repos/${{ github.repository }}/actions/jobs/$JOB_ID/logs" > "build_logs/github/job_${JOB_NAME}_${JOB_ID}.log"
           done
           
           # Create a summary file with workflow status
           WORKFLOW_STATUS="${{ github.event.workflow_run.conclusion }}"
           RUN_URL="${{ github.event.workflow_run.html_url }}"
           COMMIT_SHA="${{ github.event.workflow_run.head_sha }}"
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
           
-          cat > build_logs/last_build_summary.md << EOF
-          # Build Log Summary
+          cat > build_logs/github/last_build_summary.md << EOF
+          # GitHub Actions Build Log Summary
           
           - **Status**: $WORKFLOW_STATUS
           - **Run URL**: $RUN_URL
           - **Commit**: $COMMIT_SHA
-          - **Completed At**: $(date -u)
+          - **Completed At**: $TIMESTAMP
           
           ## Log Files
           
-          $(for file in build_logs/job_*.log; do echo "- [$(basename $file)](/$file)"; done)
+          $(for file in build_logs/github/job_*.log; do echo "- [$(basename $file)](/$(echo $file | sed 's/ /%20/g'))"; done)
           
           EOF
+
+      - name: Update main summary
+        run: |
+          mkdir -p build_logs
           
-          # Append summary to the main log file for easier access
-          cp build_logs/last_build_summary.md build_logs/README.md
+          # Create or update the main README
+          if [ -f "build_logs/README.md" ]; then
+            # If README exists, keep any Cloudflare section
+            grep -B 1000 "# Cloudflare Pages Deployment Logs" build_logs/README.md > /tmp/readme_part1.md 2>/dev/null || true
+            grep -A 1000 "# Cloudflare Pages Deployment Logs" build_logs/README.md > /tmp/readme_part2.md 2>/dev/null || true
+            
+            # Replace GitHub section
+            cat build_logs/github/last_build_summary.md > /tmp/github_section.md
+            
+            # Combine sections
+            cat /tmp/github_section.md > build_logs/README.md
+            if [ -f "/tmp/readme_part2.md" ]; then
+              echo -e "\n---\n" >> build_logs/README.md
+              cat /tmp/readme_part2.md >> build_logs/README.md
+            fi
+          else
+            # First time creating the README
+            cat build_logs/github/last_build_summary.md > build_logs/README.md
+            echo -e "\n---\n\n# Cloudflare Pages Deployment Logs\n\nNo Cloudflare deployment logs captured yet." >> build_logs/README.md
+          fi
 
       - name: Commit and push logs
         run: |
@@ -80,6 +107,199 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Update build logs for run #${{ github.event.workflow_run.id }}"
+            git commit -m "Update GitHub Actions build logs for run #${{ github.event.workflow_run.id }}"
+            git push
+          fi
+
+  capture-cloudflare-logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      - name: Fetch Cloudflare deployment logs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PROJECT_NAME: ${{ secrets.CLOUDFLARE_PROJECT_NAME || 'goetsch-site' }}
+        run: |
+          # Skip if credentials are not set
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "Cloudflare credentials not set. Skipping Cloudflare log capture."
+            exit 0
+          fi
+          
+          # Create logs directory
+          mkdir -p build_logs/cloudflare
+          
+          # Get latest deployments (limit to 5)
+          echo "Fetching Cloudflare Pages deployments..."
+          DEPLOYMENTS=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$CLOUDFLARE_PROJECT_NAME/deployments?page=1&per_page=5" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json")
+          
+          # Check if request was successful
+          SUCCESS=$(echo $DEPLOYMENTS | jq -r '.success')
+          if [ "$SUCCESS" != "true" ]; then
+            ERROR=$(echo $DEPLOYMENTS | jq -r '.errors[0].message')
+            echo "Error fetching deployments: $ERROR"
+            exit 1
+          fi
+          
+          # Extract deployment details
+          echo $DEPLOYMENTS | jq -r '.result[] | {
+            id: .id,
+            created_on: .created_on,
+            url: .url,
+            status: .stage,
+            deployment_trigger: .deployment_trigger.metadata.branch,
+            commit_message: .deployment_trigger.metadata.commit_message,
+            commit_hash: .deployment_trigger.metadata.commit_hash
+          }' > build_logs/cloudflare/deployments.json
+          
+          # Get detailed logs for each deployment
+          echo "Fetching detailed logs for each deployment..."
+          LATEST_TIMESTAMP=""
+          LATEST_DEPLOYMENT=""
+          
+          for DEPLOYMENT_ID in $(echo $DEPLOYMENTS | jq -r '.result[].id'); do
+            echo "Fetching logs for deployment: $DEPLOYMENT_ID"
+            
+            # Get deployment logs
+            LOGS=$(curl -s -X GET "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$CLOUDFLARE_PROJECT_NAME/deployments/$DEPLOYMENT_ID/history" \
+              -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+              -H "Content-Type: application/json")
+              
+            # Check if successful
+            SUCCESS=$(echo $LOGS | jq -r '.success')
+            if [ "$SUCCESS" != "true" ]; then
+              echo "Error fetching logs for deployment $DEPLOYMENT_ID"
+              continue
+            fi
+            
+            # Save detailed logs
+            echo $LOGS | jq -r '.result[] | {
+              timestamp: .timestamp,
+              status: .status,
+              message: .message
+            }' > "build_logs/cloudflare/deployment_${DEPLOYMENT_ID}.json"
+            
+            # Generate a readable log file
+            echo "# Deployment $DEPLOYMENT_ID Logs" > "build_logs/cloudflare/deployment_${DEPLOYMENT_ID}.log"
+            echo "" >> "build_logs/cloudflare/deployment_${DEPLOYMENT_ID}.log"
+            
+            DEPLOYMENT_INFO=$(echo $DEPLOYMENTS | jq -r ".result[] | select(.id == \"$DEPLOYMENT_ID\") | \"- **Created**: \(.created_on)\n- **URL**: \(.url)\n- **Status**: \(.stage)\n- **Branch**: \(.deployment_trigger.metadata.branch)\n- **Commit**: \(.deployment_trigger.metadata.commit_hash)\n- **Message**: \(.deployment_trigger.metadata.commit_message)\"")
+            echo "$DEPLOYMENT_INFO" >> "build_logs/cloudflare/deployment_${DEPLOYMENT_ID}.log"
+            echo "" >> "build_logs/cloudflare/deployment_${DEPLOYMENT_ID}.log"
+            echo "## Build Logs" >> "build_logs/cloudflare/deployment_${DEPLOYMENT_ID}.log"
+            echo "" >> "build_logs/cloudflare/deployment_${DEPLOYMENT_ID}.log"
+            
+            # Format and append each log entry
+            echo $LOGS | jq -r '.result[] | "**[\(.timestamp)]** [\(.status)] \(.message)"' >> "build_logs/cloudflare/deployment_${DEPLOYMENT_ID}.log"
+            
+            # Track latest deployment for summary
+            TIMESTAMP=$(echo $DEPLOYMENTS | jq -r ".result[] | select(.id == \"$DEPLOYMENT_ID\") | .created_on")
+            if [ -z "$LATEST_TIMESTAMP" ] || [ "$TIMESTAMP" '>' "$LATEST_TIMESTAMP" ]; then
+              LATEST_TIMESTAMP=$TIMESTAMP
+              LATEST_DEPLOYMENT=$DEPLOYMENT_ID
+            fi
+          done
+          
+          # Create summary for latest deployment
+          if [ -n "$LATEST_DEPLOYMENT" ]; then
+            DEPLOYMENT_INFO=$(echo $DEPLOYMENTS | jq -r ".result[] | select(.id == \"$LATEST_DEPLOYMENT\") | {
+              created_on: .created_on,
+              url: .url,
+              status: .stage,
+              branch: .deployment_trigger.metadata.branch,
+              commit_hash: .deployment_trigger.metadata.commit_hash,
+              commit_message: .deployment_trigger.metadata.commit_message
+            }")
+            
+            STATUS=$(echo $DEPLOYMENT_INFO | jq -r '.status')
+            CREATED=$(echo $DEPLOYMENT_INFO | jq -r '.created_on')
+            URL=$(echo $DEPLOYMENT_INFO | jq -r '.url')
+            BRANCH=$(echo $DEPLOYMENT_INFO | jq -r '.branch')
+            COMMIT=$(echo $DEPLOYMENT_INFO | jq -r '.commit_hash')
+            MESSAGE=$(echo $DEPLOYMENT_INFO | jq -r '.commit_message')
+            
+            cat > build_logs/cloudflare/last_deployment_summary.md << EOF
+          # Cloudflare Pages Deployment Logs
+          
+          ## Latest Deployment: $LATEST_DEPLOYMENT
+          
+          - **Status**: $STATUS
+          - **Created**: $CREATED
+          - **URL**: $URL
+          - **Branch**: $BRANCH
+          - **Commit**: $COMMIT
+          - **Message**: $MESSAGE
+          
+          ## Recent Deployments
+          
+          $(for file in build_logs/cloudflare/deployment_*.log; do 
+              DEPLOY_ID=$(basename $file .log | sed 's/deployment_//')
+              DEPLOY_DATE=$(grep "Created" "$file" | head -1 | sed 's/- \*\*Created\*\*: //')
+              DEPLOY_STATUS=$(grep "Status" "$file" | head -1 | sed 's/- \*\*Status\*\*: //')
+              echo "- [$DEPLOY_ID - $DEPLOY_STATUS ($DEPLOY_DATE)](/$(echo $file | sed 's/ /%20/g'))"
+            done)
+          
+          EOF
+          else
+            echo "No deployments found"
+            cat > build_logs/cloudflare/last_deployment_summary.md << EOF
+          # Cloudflare Pages Deployment Logs
+          
+          No recent deployments found.
+          
+          EOF
+          fi
+
+      - name: Update main summary
+        run: |
+          if [ ! -f "build_logs/cloudflare/last_deployment_summary.md" ]; then
+            echo "No Cloudflare deployment logs to update"
+            exit 0
+          fi
+          
+          mkdir -p build_logs
+          
+          # Create or update the main README
+          if [ -f "build_logs/README.md" ]; then
+            # If README exists, keep GitHub section and replace Cloudflare section
+            grep -B 1000 "# Cloudflare Pages Deployment Logs" build_logs/README.md > /tmp/readme_part1.md 2>/dev/null || true
+            
+            # Replace Cloudflare section
+            if [ -f "/tmp/readme_part1.md" ]; then
+              cat /tmp/readme_part1.md > build_logs/README.md
+              echo -e "\n---\n" >> build_logs/README.md
+              cat build_logs/cloudflare/last_deployment_summary.md >> build_logs/README.md
+            else
+              # No GitHub section found
+              cp build_logs/github/last_build_summary.md build_logs/README.md 2>/dev/null || echo "# GitHub Actions Build Logs\n\nNo GitHub Actions logs captured yet." > build_logs/README.md
+              echo -e "\n---\n" >> build_logs/README.md
+              cat build_logs/cloudflare/last_deployment_summary.md >> build_logs/README.md
+            fi
+          else
+            # First time creating the README
+            echo "# GitHub Actions Build Logs\n\nNo GitHub Actions logs captured yet." > build_logs/README.md
+            echo -e "\n---\n" >> build_logs/README.md
+            cat build_logs/cloudflare/last_deployment_summary.md >> build_logs/README.md
+          fi
+
+      - name: Commit and push logs
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          
+          git add build_logs/
+          
+          # Commit only if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Cloudflare Pages deployment logs"
             git push
           fi

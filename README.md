@@ -123,6 +123,15 @@ This project uses a hybrid CI/CD approach that combines GitHub Actions for testi
 3. Add the Deploy Hook URL as a GitHub secret named `CLOUDFLARE_DEPLOY_HOOK`
 4. Ensure proper build settings in Cloudflare Pages: build command `npm run build` and output directory `public`
 
+For capturing Cloudflare deployment logs (optional):
+1. Create a Cloudflare API Token with the following permissions:
+   - Account > Cloudflare Pages > Read
+   - Account > Account Settings > Read
+2. Add the following GitHub secrets:
+   - `CLOUDFLARE_API_TOKEN`: Your Cloudflare API token
+   - `CLOUDFLARE_ACCOUNT_ID`: Your Cloudflare account ID (found in the URL of your Cloudflare dashboard)
+   - `CLOUDFLARE_PROJECT_NAME`: The name of your Cloudflare Pages project (default: 'goetsch-site')
+
 Recommended hosting options:
 - Cloudflare Pages (with continuous delivery)
 - GitHub Pages
