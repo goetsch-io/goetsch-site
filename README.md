@@ -62,6 +62,8 @@ This will start a local development server at http://localhost:1313/
   - `static/css/`: CSS stylesheets
 - `assets/`: Source files for processed assets
 - `public/`: Generated site (created when building)
+- `.github/workflows/`: GitHub Actions workflow files
+  - `deploy.yml`: Continuous delivery workflow for Cloudflare Pages
 
 ## Content Management
 
@@ -103,10 +105,19 @@ This will generate the static site in the `public/` directory, ready for deploym
 
 The site can be deployed to any static hosting service:
 
+### Manual Deployment
+
 1. Build the site for production
 2. Upload the contents of the `public/` directory to your hosting provider
 
+### Automated Deployment (Recommended)
+
+This project includes a continuous delivery pipeline that automatically deploys your site to Cloudflare Pages whenever changes are pushed to the main branch.
+
+- See [CONTINUOUS_DELIVERY.md](CONTINUOUS_DELIVERY.md) for detailed instructions on setting up and using the GitHub Actions to Cloudflare Pages deployment pipeline.
+
 Recommended hosting options:
+- Cloudflare Pages (with continuous delivery)
 - GitHub Pages
 - Netlify
 - Vercel
@@ -128,6 +139,8 @@ For teams working on this project, we follow a structured development workflow w
 
 - See [DEVELOPMENT_WORKFLOW.md](DEVELOPMENT_WORKFLOW.md) for information on team roles, development workflow, CI/CD setup, and project management.
 - See [BRANCHING_STRATEGY.md](BRANCHING_STRATEGY.md) for detailed guidance on our Git branching strategy, including when and how to create branches.
+- See [GITHUB_PROJECTS_SETUP.md](GITHUB_PROJECTS_SETUP.md) for instructions on setting up and using GitHub Projects to track project status.
+- See [CONTINUOUS_DELIVERY.md](CONTINUOUS_DELIVERY.md) for detailed instructions on the automated deployment pipeline from GitHub to Cloudflare Pages.
 
 This ensures consistent, secure, and efficient development across the team.
 

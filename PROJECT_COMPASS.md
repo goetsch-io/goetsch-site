@@ -26,6 +26,7 @@ This document serves as a guiding compass for the Bradley Goetsch personal websi
 - [2025-03-01] Implemented blog, projects, and about sections
 - [2025-03-01] Added sample content to demonstrate functionality
 - [2025-03-01] Created comprehensive documentation (README, LICENSE, .gitignore)
+- [2025-03-01] Set up continuous delivery pipeline from GitHub to Cloudflare Pages
 
 ## Evaluation Criteria
 
@@ -41,12 +42,13 @@ This document serves as a guiding compass for the Bradley Goetsch personal websi
 
 You're off to a great start! Here's a roadmap for next steps so you can iterate and improve efficiently:
 
-### 1️⃣ Automate Deployment (Make It Easy to Update)
+### 1️⃣ Automate Deployment (Make It Easy to Update) ✓
 
 ✅ Set Up GitHub Actions for Hugo
 - Automate site builds every time you push changes.
-- Deploy directly to GitHub Pages, Netlify, or Vercel.
-- Want me to generate a GitHub Actions workflow for this?
+- Deploy directly to Cloudflare Pages using GitHub Actions.
+- Workflow file created at `.github/workflows/deploy.yml`.
+- Detailed documentation added in `CONTINUOUS_DELIVERY.md`.
 
 ### 2️⃣ Improve Content & Structure
 
